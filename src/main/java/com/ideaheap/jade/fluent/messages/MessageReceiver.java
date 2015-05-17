@@ -20,12 +20,28 @@ public class MessageReceiver {
         return new MessageReceiver(agent, behavior);
     }
 
-    public void forInteger(IntegerMessageContentReceiver contentReceiver) {
+    private <T> void forMessage(BaseMessageReceiver<T> receiver, StringTransform<T> transform) {
         ACLMessage message = agent.receive();
         if (message != null) {
-            contentReceiver.onMessage(Integer.valueOf(message.getContent()));
+            receiver.onMessage(message.getSender(), transform.transform(message.getContent()));
         } else {
             behavior.block();
         }
+    }
+
+    public void forInteger(BaseMessageReceiver<Integer> contentReceiver) {
+        forMessage(contentReceiver, (content) -> Integer.valueOf(content));
+    }
+    public void forDouble(BaseMessageReceiver<Double> contentReceiver) {
+        forMessage(contentReceiver, (content) -> Double.valueOf(content));
+    }
+    public void forString(BaseMessageReceiver<String> contentReceiver) {
+        forMessage(contentReceiver, (content) -> (content));
+    }
+    public void forLong(BaseMessageReceiver<Long> contentReceiver) {
+        forMessage(contentReceiver, (content) -> Long.valueOf(content));
+    }
+    public void forBoolean(BaseMessageReceiver<Boolean> contentReceiver) {
+        forMessage(contentReceiver, (content) -> Boolean.valueOf(content));
     }
 }
