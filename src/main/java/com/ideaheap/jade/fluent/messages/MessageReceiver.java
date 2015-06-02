@@ -3,6 +3,9 @@ package com.ideaheap.jade.fluent.messages;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.IOException;
 
 /**
  * Created by nwertzberger on 5/5/15.
@@ -10,17 +13,15 @@ import jade.lang.acl.ACLMessage;
 public class MessageReceiver {
     private final Agent agent;
     private final Behaviour behavior;
+    private ObjectMapper mapper;
 
-    private MessageReceiver(Agent agent, Behaviour behavior) {
+    MessageReceiver(Agent agent, Behaviour behavior, ObjectMapper mapper) {
         this.agent = agent;
         this.behavior = behavior;
+        this.mapper = mapper;
     }
 
-    public static MessageReceiver listen(Agent agent, Behaviour behavior) {
-        return new MessageReceiver(agent, behavior);
-    }
-
-    private <T> void forMessage(BaseMessageReceiver<T> receiver, StringTransform<T> transform) {
+    private <T> void forMessage(BaseMessageReceiver<T> receiver, StringTransform<T> transform) throws MessageReceiverException {
         ACLMessage message = agent.receive();
         if (message != null) {
             receiver.onMessage(message.getSender(), transform.transform(message.getContent()));
@@ -29,19 +30,29 @@ public class MessageReceiver {
         }
     }
 
-    public void forInteger(BaseMessageReceiver<Integer> contentReceiver) {
+    public void forInteger(BaseMessageReceiver<Integer> contentReceiver) throws MessageReceiverException {
         forMessage(contentReceiver, (content) -> Integer.valueOf(content));
     }
-    public void forDouble(BaseMessageReceiver<Double> contentReceiver) {
+    public void forDouble(BaseMessageReceiver<Double> contentReceiver) throws MessageReceiverException {
         forMessage(contentReceiver, (content) -> Double.valueOf(content));
     }
-    public void forString(BaseMessageReceiver<String> contentReceiver) {
+    public void forString(BaseMessageReceiver<String> contentReceiver) throws MessageReceiverException {
         forMessage(contentReceiver, (content) -> (content));
     }
-    public void forLong(BaseMessageReceiver<Long> contentReceiver) {
+    public void forLong(BaseMessageReceiver<Long> contentReceiver) throws MessageReceiverException {
         forMessage(contentReceiver, (content) -> Long.valueOf(content));
     }
-    public void forBoolean(BaseMessageReceiver<Boolean> contentReceiver) {
+    public void forBoolean(BaseMessageReceiver<Boolean> contentReceiver) throws MessageReceiverException {
         forMessage(contentReceiver, (content) -> Boolean.valueOf(content));
+    }
+
+    public <T> void forClass(Class<T> clazz, BaseMessageReceiver<T> contentReceiver) throws MessageReceiverException {
+        forMessage(contentReceiver, (content) -> {
+            try {
+                return mapper.readValue(content, clazz);
+            } catch (IOException e) {
+                throw new MessageReceiverException(e);
+            }
+        });
     }
 }
