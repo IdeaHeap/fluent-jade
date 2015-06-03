@@ -2,6 +2,7 @@ package com.ideaheap.jade.fluent.messages;
 
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,9 +29,9 @@ public class MessageReceiverTest {
 
 
     @Test
-    public void messageReceiver_canReceiveMessages() throws Exception {
+    public void messageReceiver_canReceiveMessages() throws Exception, MessageReceiverException {
         Mockito.when(agent.receive()).thenReturn(inform().withContent("meh").build());
-        MessageReceiver.listen(agent, behaviour).forString((sender, content) -> {
+        new MessageReceiver(agent, behaviour, new ObjectMapper()).forString((sender, content) -> {
             assertEquals("meh", content);
         });
     }
@@ -38,7 +39,7 @@ public class MessageReceiverTest {
     @Test
     public void messageReceiver_blocksOnNull() throws Exception {
         Mockito.when(agent.receive()).thenReturn(null);
-        MessageReceiver.listen(agent, behaviour).forString((sender, content) -> {
+        new MessageReceiver(agent, behaviour, new ObjectMapper()).forString((sender, content) -> {
             fail();
         });
         Mockito.verify(behaviour).block();

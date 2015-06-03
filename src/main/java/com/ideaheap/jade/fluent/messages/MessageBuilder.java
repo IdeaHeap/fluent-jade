@@ -2,6 +2,9 @@ package com.ideaheap.jade.fluent.messages;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.IOException;
 
 /**
  * Created by nwertzberger on 4/20/15.
@@ -44,5 +47,14 @@ public class MessageBuilder {
 
     public MessageBuilder withContent(int i) {
         return withContent(Integer.toString(i));
+    }
+
+    public <T> MessageBuilder withContent(T suggestion) {
+        try {
+            message.setContent(new ObjectMapper().writeValueAsString(suggestion));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return this;
     }
 }
