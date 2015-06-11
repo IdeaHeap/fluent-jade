@@ -1,8 +1,8 @@
 package com.ideaheap.jade.fluent.messages;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 

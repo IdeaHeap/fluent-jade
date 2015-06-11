@@ -1,8 +1,8 @@
 package com.ideaheap.jade.fluent.messages;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Created by nwertzberger on 5/30/15.

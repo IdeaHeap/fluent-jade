@@ -1,9 +1,9 @@
 package com.ideaheap.jade.fluent.messages;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 

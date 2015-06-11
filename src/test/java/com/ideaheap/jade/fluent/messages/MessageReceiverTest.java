@@ -1,8 +1,8 @@
 package com.ideaheap.jade.fluent.messages;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
