@@ -10,15 +10,15 @@ import jade.domain.FIPAException;
 /**
  * Created by nwertzberger on 6/2/15.
  */
-public class DFServiceFinder {
+public class DfServiceFinder {
     private final Agent agent;
     private String type;
 
-    public DFServiceFinder(Agent agent) {
+    public DfServiceFinder(Agent agent) {
         this.agent = agent;
     }
 
-    public DFServiceFinder forServiceType(String type) {
+    public DfServiceFinder forServiceType(String type) {
         this.type = type;
         return this;
     }
