@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static com.ideaheap.jade.fluent.messages.MessageBuilder.inform;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -26,11 +25,12 @@ public class MessageReceiverTest {
 
     @Mock
     private Behaviour behaviour;
+    private Messenger messenger = new Messenger(new ObjectMapper());
 
 
     @Test
     public void messageReceiver_canReceiveMessages() throws Exception, MessageReceiverException {
-        Mockito.when(agent.receive()).thenReturn(inform().withContent("meh").build());
+        Mockito.when(agent.receive()).thenReturn(messenger.inform().withContent("meh").build());
         new MessageReceiver(agent, behaviour, new ObjectMapper()).forString((sender, content) -> {
             assertEquals("meh", content);
         });

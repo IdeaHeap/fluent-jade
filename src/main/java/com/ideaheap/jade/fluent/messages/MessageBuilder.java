@@ -12,13 +12,11 @@ import java.io.IOException;
 public class MessageBuilder {
 
     private final ACLMessage message;
+    private final ObjectMapper objectMapper;
 
-    private MessageBuilder(int performative) {
+    public MessageBuilder(int performative, ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         this.message = new ACLMessage(performative);
-    }
-
-    public static MessageBuilder inform() {
-        return new MessageBuilder(ACLMessage.INFORM);
     }
 
     public MessageBuilder to(AID... recievers) {
@@ -51,7 +49,7 @@ public class MessageBuilder {
 
     public <T> MessageBuilder withContent(T suggestion) {
         try {
-            message.setContent(new ObjectMapper().writeValueAsString(suggestion));
+            message.setContent(objectMapper.writeValueAsString(suggestion));
         } catch (IOException e) {
             e.printStackTrace();
         }
