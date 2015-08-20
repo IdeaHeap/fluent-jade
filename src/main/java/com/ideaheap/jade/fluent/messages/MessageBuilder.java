@@ -5,6 +5,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * Created by nwertzberger on 4/20/15.
@@ -19,9 +20,16 @@ public class MessageBuilder {
         this.message = new ACLMessage(performative);
     }
 
-    public MessageBuilder to(AID... recievers) {
-        for (AID reciever : recievers) {
-            message.addReceiver(reciever);
+    public MessageBuilder to(AID... receivers) {
+        for (AID receiver : receivers) {
+            message.addReceiver(receiver);
+        }
+        return this;
+    }
+
+    public MessageBuilder to(Collection<AID> receivers) {
+        for (AID receiver : receivers) {
+            message.addReceiver(receiver);
         }
         return this;
     }

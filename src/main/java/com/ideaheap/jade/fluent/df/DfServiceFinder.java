@@ -7,6 +7,10 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 /**
  * Created by nwertzberger on 6/2/15.
  */
@@ -23,16 +27,28 @@ public class DfServiceFinder {
         return this;
     }
 
-    public AID findOne() {
+    public Optional<AID> findOne() {
+        Set<AID> all = findAll();
+        if (all.size() > 0) {
+            return Optional.of(findAll().iterator().next());
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public Set<AID> findAll() {
         DFAgentDescription dfd = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
         sd.setType(type);
         dfd.addServices(sd);
+        Set<AID> aids = new HashSet<>();
         try {
-            return DFService.search(agent, dfd)[0].getName();
+            for (DFAgentDescription desc : DFService.search(agent, dfd)) {
+                aids.add(desc.getName());
+            }
         } catch (FIPAException e) {
             e.printStackTrace();
         }
-        return null;
+        return aids;
     }
 }
