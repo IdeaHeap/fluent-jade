@@ -17,6 +17,7 @@ import java.util.Set;
 public class DfServiceFinder {
     private final Agent agent;
     private String type;
+    private String serviceName;
 
     public DfServiceFinder(Agent agent) {
         this.agent = agent;
@@ -24,6 +25,11 @@ public class DfServiceFinder {
 
     public DfServiceFinder forServiceType(String type) {
         this.type = type;
+        return this;
+    }
+
+    public DfServiceFinder forServiceName(String serviceName) {
+        this.serviceName = serviceName;
         return this;
     }
 
@@ -39,7 +45,12 @@ public class DfServiceFinder {
     public Set<AID> findAll() {
         DFAgentDescription dfd = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
-        sd.setType(type);
+        if (type != null) {
+            sd.setType(type);
+        }
+        if (serviceName != null) {
+            sd.setName(serviceName);
+        }
         dfd.addServices(sd);
         Set<AID> aids = new HashSet<>();
         try {
