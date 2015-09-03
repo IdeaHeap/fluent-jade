@@ -28,7 +28,11 @@ public class MessageReceiver {
         StringTransform<T> transform) throws MessageReceiverException {
         ACLMessage message = agent.receive();
         if (message != null) {
-            receiver.onMessage(message.getSender(), transform.transform(message.getContent()));
+            if (message.getContent() == null) {
+                receiver.onMessage(message.getSender(), null);
+            } else {
+                receiver.onMessage(message.getSender(), transform.transform(message.getContent()));
+            }
         } else {
             behavior.block();
         }
