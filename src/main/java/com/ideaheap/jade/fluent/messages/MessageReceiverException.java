@@ -9,4 +9,8 @@ public class MessageReceiverException extends Exception {
     public MessageReceiverException(IOException e) {
         super(e);
     }
+
+    public MessageReceiverException(String s, MessageReceiverException e) {
+        super(s, e);
+    }
 }

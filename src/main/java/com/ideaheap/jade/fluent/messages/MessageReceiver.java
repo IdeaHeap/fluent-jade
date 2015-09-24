@@ -28,10 +28,18 @@ public class MessageReceiver {
         StringTransform<T> transform) throws MessageReceiverException {
         ACLMessage message = agent.receive();
         if (message != null) {
-            if (message.getContent() == null) {
-                receiver.onMessage(message.getSender(), null);
-            } else {
-                receiver.onMessage(message.getSender(), transform.transform(message.getContent()));
+            try {
+                if (message.getContent() == null) {
+                    receiver.onMessage(message.getSender(), null);
+                } else {
+                    receiver.onMessage(
+                        message.getSender(),
+                        transform.transform(message.getContent())
+                    );
+                }
+            } catch (MessageReceiverException e) {
+                throw new MessageReceiverException("Caught exception from " + message.getSender()
+                                                                                     .getLocalName(), e );
             }
         } else {
             behavior.block();
