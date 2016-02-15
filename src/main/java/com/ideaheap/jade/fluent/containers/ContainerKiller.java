@@ -9,6 +9,7 @@ import jade.wrapper.StaleProxyException;
  */
 public class ContainerKiller {
 
+
     public static void killContainerOf(Agent agent) {
         final AgentContainer containerController = agent.getContainerController();
         agent.doDelete();
