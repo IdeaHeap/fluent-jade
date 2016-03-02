@@ -38,8 +38,7 @@ public class MessageReceiver {
                     );
                 }
             } catch (MessageReceiverException e) {
-                throw new MessageReceiverException("Caught exception from " + message.getSender()
-                                                                                     .getLocalName(), e );
+                throw new MessageReceiverException("Caught exception from " + message.getSender().getLocalName(), e );
             }
         } else {
             behavior.block();
